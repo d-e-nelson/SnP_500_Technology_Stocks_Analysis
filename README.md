@@ -30,7 +30,7 @@ The two data sets were linked together using the stock symbols as a common field
 tech_data<-read.csv('tech_data.csv')
 ```
 
-** Add Libraries
+**Add Libraries
 
 ```r
 library(tidyr)
@@ -73,4 +73,32 @@ ggplot(tech_top, aes(x = date, y = close, color = Security)) +
 ![Top 5 Companies by closing price](images/top_5_tech_company_closing_prices.png)
 
 This graph shows the time series data for the daily closing prices of the top five performing stocks in the Information Technology sector. The results were limited to the top 5 stocks in this sector due to the Information Technology sector comprising 40 different stocks, which was done for readability purposes. The top technology stocks were determined by comparing their average daily trading volume with that of the stocks in the sector. According to the graph, Apple Inc. was the best-performing stock, with an overall upward trend that significantly outperformed the other four top stocks. Microsoft is next in line.
+
+## Average Daily Trading Volume for All Information Technoloy Stocks
+
+Previously, we extracted the top 5 Information Technology stocks to compare against each other. This time, we will use a bar chart to plot the values of every stock in the Information Technology sector to see if any information can be derived. To do this I will be finding the mean of the daily trading volumes for each stock.
+
+1. Calculate the average volume of the technology stocks.
+
+```r
+avg_volume_data <- tech_data %>%
+  group_by(symbol, Security) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE), .groups = "drop")
+```
+
+2. Create a bar chart that shows the average trading volume of each company in the Information Technology sector.
+
+```r
+ggplot(avg_volume_data, aes(x = Security, y = avg_volume)) +
+  geom_bar(stat = "identity", fill = "#97B3C6", color="white") +
+  theme_minimal()+
+  labs(title = "Average Trading Volume by Tech Company",
+       x = "Company",
+       y = "Average Volume") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+![Average Trading Volume  by Tech Company](avg_trading_vol_by_tech_company.png)
+
+The graph displays the names of companies in the Information Technology sector along the X-axis and their average trading volume on the Y-axis. Examining this graph alongside our first graph, we can see similarities between the top 5 performing Information Technology stocks. The top 5 performing Information Technology stocks are the same stocks shown on this graph, which have the top 5 average daily trading volumes; however, their ranking order is slightly different. Returning to my original question, these first two graphs lead me to wonder if daily trading volume has a significant impact on a stock’s performance.
 
