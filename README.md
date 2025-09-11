@@ -28,3 +28,9 @@ The two data sets were linked together using the stock symbols as a common field
 ```r
 tech_data<-read.csv('tech_data.csv')
 ```
+** Add Libraries
+```r
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
