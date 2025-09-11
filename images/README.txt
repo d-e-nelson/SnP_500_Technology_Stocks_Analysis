@@ -1,1 +1,1 @@
-
+This folder contain images of R code results. These results were generated in RStudio running the code that is shown in the code blocks located in the README.txt file found in the root directory. Images were needed since code blocks inserted into the README.txt file using Markdown language only formats the code for display purposes, it does not run the code. 
