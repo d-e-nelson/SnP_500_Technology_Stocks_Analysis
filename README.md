@@ -28,9 +28,35 @@ The two data sets were linked together using the stock symbols as a common field
 ```r
 tech_data<-read.csv('tech_data.csv')
 ```
-** Add Libraries
+**Add Libraries
 ```r
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 ```
+
+##My Overall Question
+Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock’s value. This question will be refined and adjusted as I explore the dataset.
+
+##First Look
+
+```r
+# Obtain a list of the symbols for the top 5 information technology stocks
+top_symbols <- tech_data %>%
+  group_by(symbol) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE)) %>%
+  arrange(desc(avg_volume)) %>%
+  slice(1:5) %>%
+  pull(symbol)
+
+# Create smaller data set by filtering larger data set by the created list of top 5 information technology stock symbols
+tech_top <- tech_data %>%
+  filter(symbol %in% top_symbols)
+
+ggplot(tech_top, aes(x = date, y = close, color = Security)) +
+     geom_line() +
+     theme_minimal()+
+     labs(title = "Top 5 Tech Stocks by Avg Volume",
+          x = "Date", y = "Closing Price")
+```
+
