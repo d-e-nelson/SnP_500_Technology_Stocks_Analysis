@@ -98,7 +98,7 @@ ggplot(avg_volume_data, aes(x = Security, y = avg_volume)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![Average Trading Volume  by Tech Company](avg_trading_vol_by_tech_company.png)
+![Average Trading Volume  by Tech Company](images/avg_trading_vol_by_tech_company.png)
 
 The graph displays the names of companies in the Information Technology sector along the X-axis and their average trading volume on the Y-axis. Examining this graph alongside our first graph, we can see similarities between the top 5 performing Information Technology stocks. The top 5 performing Information Technology stocks are the same stocks shown on this graph, which have the top 5 average daily trading volumes; however, their ranking order is slightly different. Returning to my original question, these first two graphs lead me to wonder if daily trading volume has a significant impact on a stock’s performance.
 
