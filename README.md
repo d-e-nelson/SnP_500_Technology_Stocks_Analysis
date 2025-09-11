@@ -1,1 +1,1 @@
-# S-P500_Technology_Stocks_Analysis
+# S&P500_Technology_Stocks_Analysis
