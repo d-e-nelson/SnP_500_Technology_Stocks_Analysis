@@ -60,3 +60,5 @@ ggplot(tech_top, aes(x = date, y = close, color = Security)) +
           x = "Date", y = "Closing Price")
 ```
 
+![Top 5 Companies by closing price](images/top_5_tech_company_closing_prices.png)
+
