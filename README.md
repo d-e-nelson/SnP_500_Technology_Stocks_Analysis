@@ -35,11 +35,13 @@ library(dplyr)
 library(ggplot2)
 ```
 
-##My Overall Question
+## My Overall Question
 Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock’s value. This question will be refined and adjusted as I explore the dataset.
 
-##First Look
+## First Look
+To start off I will first take a look at the top 5 Information Technology companies to get a visual comparison of how their closing prices compare over time. To do this I will first need to figure out what the top five companies are and create a small dataframe that contains just their information. I will be using a company's average daily trading volumn as the metric for comparing the companies against each other when determine the top five companies. Finally I will use ggplot to generate a line graph so we can visualy the closing prices for the stocks over the span of the data set. 
 
+1. Select the top 5 Technology Stocks by average volume to create a sub data set.
 ```r
 # Obtain a list of the symbols for the top 5 information technology stocks
 top_symbols <- tech_data %>%
@@ -52,7 +54,9 @@ top_symbols <- tech_data %>%
 # Create smaller data set by filtering larger data set by the created list of top 5 information technology stock symbols
 tech_top <- tech_data %>%
   filter(symbol %in% top_symbols)
-
+```
+2. Create a multi-line graph to display the closing values of the top 5 tech stocks over the span of the data set.
+```r
 ggplot(tech_top, aes(x = date, y = close, color = Security)) +
      geom_line() +
      theme_minimal()+
@@ -61,4 +65,6 @@ ggplot(tech_top, aes(x = date, y = close, color = Security)) +
 ```
 
 ![Top 5 Companies by closing price](images/top_5_tech_company_closing_prices.png)
+
+This graph shows the time series data for the daily closing prices of the top five performing stocks in the Information Technology sector. The results were limited to the top 5 stocks in this sector due to the Information Technology sector comprising 40 different stocks, which was done for readability purposes. The top technology stocks were determined by comparing their average daily trading volume with that of the stocks in the sector. According to the graph, Apple Inc. was the best-performing stock, with an overall upward trend that significantly outperformed the other four top stocks. Microsoft is next in line.
 
