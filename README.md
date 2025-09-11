@@ -25,10 +25,13 @@ Tech_data.csv is was constructed by combining two seperate data sets and then se
 The two data sets were linked together using the stock symbols as a common field, and then cleaned by having any records with missing data removed.
 
 ## Setting the root data set:
+
 ```r
 tech_data<-read.csv('tech_data.csv')
 ```
-**Add Libraries
+
+** Add Libraries
+
 ```r
 library(tidyr)
 library(dplyr)
@@ -42,6 +45,7 @@ Going into this analysis, the question I want to research is whether there are a
 To start off I will first take a look at the top 5 Information Technology companies to get a visual comparison of how their closing prices compare over time. To do this I will first need to figure out what the top five companies are and create a small dataframe that contains just their information. I will be using a company's average daily trading volumn as the metric for comparing the companies against each other when determine the top five companies. Finally I will use ggplot to generate a line graph so we can visualy the closing prices for the stocks over the span of the data set. 
 
 1. Select the top 5 Technology Stocks by average volume to create a sub data set.
+
 ```r
 # Obtain a list of the symbols for the top 5 information technology stocks
 top_symbols <- tech_data %>%
@@ -55,7 +59,9 @@ top_symbols <- tech_data %>%
 tech_top <- tech_data %>%
   filter(symbol %in% top_symbols)
 ```
+
 2. Create a multi-line graph to display the closing values of the top 5 tech stocks over the span of the data set.
+
 ```r
 ggplot(tech_top, aes(x = date, y = close, color = Security)) +
      geom_line() +
