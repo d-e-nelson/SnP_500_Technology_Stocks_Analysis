@@ -128,3 +128,25 @@ The goal was to check if there was a correlation between daily trading volume an
 1. Our confidence interval of 95% would give us an alpha of 0.05, and since our resulting p-value of 4.256e-05 is smaller than 0.05, we will reject the null hypothesis that there is no correlation between the daily trading volumes and daily stock price changes.
 
 2. Even though a correlation exists, our corr value of -0.0206256 tells us that it’s basically an insignificant correlation that, if it were ever to show up, would manifest as increased trading volume resulting in slight downward daily stock price shifts and vice versa.
+
+
+## Distrubution of Daily Closing Prices
+
+Now we will take a look at the individual closing prices of all Information Technology stocks to see if they form a recognisable distrubution. To do this I will use a histogram where the X-axis contains bins for different closing values. 
+
+```r
+ggplot(data = tech_data, aes(close))+
+  geom_histogram(binwidth = 10, fill="#97B3C6", color="white")+
+  theme_minimal()+
+  scale_x_continuous(breaks = seq(0,max(tech_data$close, na.rm=TRUE), by=20))+
+  labs(x = "Closing Prices",
+    y = "Density",
+    title = "Distrubution of Closing Prices"
+  )
+```
+
+![Distrubution of Stock Closing Prices](images/distrubution_of_closing_prices.png)
+
+The resulting distribution of closing prices forms a left-skewed curve. Across the 40 stocks in the Information Technology sector, the majority of the 39,379 observed closing prices fall between $20 and $100, with decreasing frequency extending out to around $260.
+
+Several factors could explain this distribution. Lower closing prices may reflect subpar stock performance at the time of observation, or they could result from stock splits intended to maintain accessible prices. An interesting follow-up question is whether the higher-priced observations represent a consistent group of stocks or if occasional outliers drive them. If the higher-priced stocks are consistent, comparing them with the top five stocks by trading volume identified in Question 1 could provide additional insight into sector dynamics.
