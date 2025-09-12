@@ -24,19 +24,12 @@ Tech_data.csv is was constructed by combining two seperate data sets and then se
 
 The two data sets were linked together using the stock symbols as a common field, and then cleaned by having any records with missing data removed.
 
-## Setting the root data set:
 
-```r
-tech_data<-read.csv('tech_data.csv')
-```
+[Analysis of S&P 500 Technology Stocks](SnP 500 Stock Analysis.html)
 
-**Add Libraries
 
-```r
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-```
+
+
 
 ## My Overall Question
 Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock’s value. This question will be refined and adjusted as I explore the dataset.
