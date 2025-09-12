@@ -151,4 +151,51 @@ The resulting distribution of closing prices forms a left-skewed curve. Across t
 
 Several factors could explain this distribution. Lower closing prices may reflect subpar stock performance at the time of observation, or they could result from stock splits intended to maintain accessible prices. An interesting follow-up question is whether the higher-priced observations represent a consistent group of stocks or if occasional outliers drive them. If the higher-priced stocks are consistent, comparing them with the top five stocks by trading volume identified in Question 1 could provide additional insight into sector dynamics.
 
+## Checking to See if a Relationship Exists Between the Top Sub Industries 
 
+1. First we will check to see how many Sub Industries exist in the Information Technology sector to see if its a viable point to sub divide the data.
+
+```r
+ num_unique <- length(unique(tech_data$GICS.Sub.Industry))
+num_unique
+```
+
+![Number of Unique Sub Insdustries](images/num_unique_sub_industries.png)
+
+We have 11 Information Technology Sub-Sectors to work with, so we will perform our analysis on the top 2 Sub-Sectors using the same ranking metric of daily trading volume and a comparative metric of closing price.
+
+2. Following the same methodology as the first section, we will figure out what the top 2 performing Sub Industries in the Information Technology sector are by average trading volume.
+
+```r
+top_two_groups <- tech_data %>%
+  group_by(GICS.Sub.Industry) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE)) %>%
+  arrange(desc(avg_volume)) %>%
+  slice(1:2) %>%
+  pull(GICS.Sub.Industry)
+```
+
+3. Create a smaller data set containing just the information on the top 2 performing Information Technology Sub Industries by filtering the larger Information Technology data set.
+
+```r
+two_groups_data <- tech_data %>%
+  filter(GICS.Sub.Industry %in% top_two_groups)
+```
+
+4. Since the data was found to be left-skewed when plotting the histogram section 4, I cannot use any statistical tests that assume a normal distribution of data. Therefore, I will use a Mann-Whitney U test and stick with closing prices as our metric.
+
+```r
+wilcox.test(close~GICS.Sub.Industry, data=two_groups_data)
+```
+
+![Wilcox Test Results](images/wilcox_results.png)
+
+The resulting p-value is really small, much smaller than the default 95% confidence coefficient (alpha: 0.05) allows. Since the Mann-Whitney U tests for differences in median values, we must conclude that a difference was found. Based on the small p-value, we must reject the null hypothesis that states there is no difference in the median closing prices of the stocks in these two sub-sectors of the Information Technology sector. Knowing this tells us that there is a difference between the median closing prices, but not what the two industries were or what their median closing prices were.
+
+```r
+two_groups_data %>%
+  group_by(GICS.Sub.Industry) %>%
+  summarise(median_close = median(close))
+```
+
+![Two Top Sub Industeries](images/top_groups.png)
