@@ -1,0 +1,226 @@
+---
+title: "Assignment 3"
+author: "David Nelson"
+date: "2025-08-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+## Data Set Update
+My original data set has been merged with another data set to add additional column.
+
+**Original Data Set** ([link](https://www.kaggle.com/datasets/mysarahmadbhat/stock-prices)): Contains stock time series information. The columns it contains include the stock's symbol, date, open, high, low, and close. 
+
+**Added Data Set** ([link](https://en.wikipedia.org/wiki/List_of_S%26P_500_companies?utm_source=chatgpt.com)): This data set contains master data on individual stocks. The data that it provides is the stock's symbol, its security, GICS Sector, GICS Sub-Industry, Headquarters Location, date added to table, Central Index Key (CIK), and founding year. 
+
+The two data sets were linked together using the stock symbols as a common field, and then cleaned by having any records with missing data removed.
+
+**Code that was used to merge the data sets:**
+```{r}
+getwd()
+setwd('I:\\Data Analytics\\archive')
+getwd()
+
+stock_data <- read.csv('stock prices.csv')
+industry_data <- read.csv('Industry.csv')
+
+stock_data_complete <- stock_data %>%
+  left_join(industry_data, by = c("symbol" = "Symbol")) %>%
+  drop_na()   # removes any rows where the join didn't find a match
+
+write.csv(stock_data_complete, "stock_data_complete.csv", row.names = FALSE)
+```
+
+**Isolate Data on the Information Technology Sector**
+
+It was decided to isolate the records concerning the Information Technology sector to limit the number of Companies and sub-sectors included in the different analyses. The goal is to make the graphs easier to read. The date column was also adjusted so that ggplot2 would recognize its information as dates rather than text.  
+```{r}
+tech_data <- stock_data_complete %>%
+  filter(GICS.Sector == "Information Technology") %>%
+  mutate(date = as.Date(date, format = "%Y-%m-%d"))
+
+write.csv(tech_data, "tech_data.csv", row.names = FALSE)
+```
+
+## Overall Question
+Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock's value. This question will be refined and adjusted as I explore the dataset.  
+
+
+## Question 1
+**Load your CSV data set into R as instructed in previous assignment. Select columns to plot together to visualize your
+data. Plot a graph out of any of the ones we reviewed in class. Make sure axes, lines are annotated and it has a
+title. Briefly explain what your graph shows. Show the R code that resulted in the graph.**
+
+To answer this question, it would be a good starting point to compare our top-performing stocks in the Information Technology sector against each other. To do this, I will use the average daily trading volume of each stock to form a ranking list and select just the top 5.
+
+1. Select the top 5 Technology Stocks by average volume to create a sub data set.
+```{r}
+# Obtain a list of the symbols for the top 5 information technology stocks
+top_symbols <- tech_data %>%
+  group_by(symbol) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE)) %>%
+  arrange(desc(avg_volume)) %>%
+  slice(1:5) %>%
+  pull(symbol)
+
+# Create smaller data set by filtering larger data set by the created list of top 5 information technology stock symbols
+tech_top <- tech_data %>%
+  filter(symbol %in% top_symbols)
+```
+
+2. Create a multi-line graph to display the closing values of the top 5 tech stocks over the span of the data set.
+```{r}
+ggplot(tech_top, aes(x = date, y = close, color = Security)) +
+     geom_line() +
+     theme_minimal()+
+     labs(title = "Top 5 Tech Stocks by Avg Volume",
+          x = "Date", y = "Closing Price")
+
+```
+
+This graph shows the time series data for the daily closing prices of the top five performing stocks in the Information Technology sector. The results were limited to the top 5 stocks in this sector due to the Information Technology sector comprising 40 different stocks, which was done for readability purposes. The top technology stocks were determined by comparing their average daily trading volume with that of the stocks in the sector. According to the graph, Apple Inc. was the best-performing stock, with an overall upward trend that significantly outperformed the other four top stocks. Microsoft is next in line.  
+
+
+
+
+## Question 2
+**Do a simple statistical calculation (e.g. mean, standard deviation, mode, median, etc.) with R that aligns with your hypothesis and
+plot/report results. Explain what the result means in terms of your question.**
+
+Previously, we extracted the top 5 Information Technology stocks to compare against each other. This time, we will plot the values of every stock in the Information Technology sector to see if any information can be derived. The statistical calculation we will use is the mean of the daily trading volumes for each stock.
+
+1. Calculate the average volume of the technology stocks.
+```{r}
+avg_volume_data <- tech_data %>%
+  group_by(symbol, Security) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE), .groups = "drop")
+```
+
+2. Create a bar chart that shows the average trading volume of each company in the Information Technology sector. 
+
+```{r}
+ggplot(avg_volume_data, aes(x = Security, y = avg_volume)) +
+  geom_bar(stat = "identity", fill = "#97B3C6", color="white") +
+  theme_minimal()+
+  labs(title = "Average Trading Volume by Tech Company",
+       x = "Company",
+       y = "Average Volume") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+The graph displays the names of companies in the Information Technology sector along the X-axis and their average trading volume on the Y-axis. Examining this graph alongside our first graph, we can see similarities between the top 5 performing Information Technology stocks. The top 5 performing Information Technology stocks are the same stocks shown on this graph, which have the top 5 average daily trading volumes; however, their ranking order is slightly different. Returning to my original question, these first two graphs lead me to wonder if daily trading volume has a significant impact on a stock's performance.  
+
+
+## Question 3
+**We will apply statistical tests to your data set to gain insight in answering your questions. Start by first applying a correlation or
+regression analysis to detect a relationship. Explain how the relationship aligns with your questions.**
+
+We will test to see if there is a correlation between the daily number of trades and the daily price shift of a stock in the Information Technology sector. 
+
+1. Add a column to our data set for daily price shifts.
+```{r}
+tech_data <- tech_data %>%
+  mutate(price_shift = close - open)
+```
+
+2. Do a correlation test testing volume and price_shift against each other. 
+```{r}
+cor_test <- cor.test(tech_data$volume, tech_data$price_shift)
+
+cor_test
+```
+
+3. Check the number of rows that we are analyzing.
+```{r}
+num_row <- nrow(tech_data)
+num_row
+```
+
+The goal was to check if there was a correlation between daily trading volume and daily changes in stock prices. The number of observations in the data set was checked because a small correlation could have a larger impact when the data set is larger. Here is what we learned from the results:
+
+1. Our confidence interval of 95% would give us an alpha of 0.05, and since our resulting p-value of 4.256e-05 is smaller than 0.05, we will reject the null hypothesis that there is no correlation between the daily trading volumes and daily stock price changes. 
+
+2. Even though a correlation exists, our corr value of -0.0206256 tells us that it's basically an insignificant correlation that, if it were ever to show up, would manifest as increased trading volume resulting in slight downward daily stock price shifts and vice versa.  
+
+## Question 4
+**For the second statistical test, select a numerical column that you want to check. First, plot a histogram of it and discuss about its
+distribution. As you did with the above graph, make sure the histogram is properly annotated.**
+
+
+For this section, we will determine if there is a recognizable distribution of the closing prices for each of the stocks in the Information Technology sector.
+
+```{r}
+ggplot(data = tech_data, aes(close))+
+  geom_histogram(binwidth = 10, fill="#97B3C6", color="white")+
+  theme_minimal()+
+  scale_x_continuous(breaks = seq(0,max(tech_data$close, na.rm=TRUE), by=20))+
+  labs(x = "Closing Prices",
+    y = "Density",
+    title = "Distrubution of Closing Prices"
+  )
+```
+
+The resulting distribution of closing prices forms a left-skewed curve. Across the 40 stocks in the Information Technology sector, the majority of the 39,379 observed closing prices fall between $20 and $100, with decreasing frequency extending out to around $260.
+
+Several factors could explain this distribution. Lower closing prices may reflect subpar stock performance at the time of observation, or they could result from stock splits intended to maintain accessible prices. An interesting follow-up question is whether the higher-priced observations represent a consistent group of stocks or if occasional outliers drive them. If the higher-priced stocks are consistent, comparing them with the top five stocks by trading volume identified in Question 1 could provide additional insight into sector dynamics.     
+
+
+## Question 5
+**Then, divide your data set into two groups of rows based on another column that matters for your question and apply a test that we
+discussed in class (t-test, ANOVA, ...) to test for significant differences between the two groups. Make sure the test you selected
+is consistent with the distribution that you observed earlier. Show the code and briefly explain the results.**
+
+
+
+1. First we will check to see how many Sub Industries exist in the Information Technology sector to see if its a viable point to sub divide the data. 
+```{r}
+num_unique <- length(unique(tech_data$GICS.Sub.Industry))
+num_unique
+```
+
+We have 11 Information Technology Sub-Sectors to work with, so we will perform our analysis on the top 2 Sub-Sectors using the same ranking metric of daily trading volume and a comparative metric of closing price.  
+
+
+2. Following the same methodology as question 1, figure out what the top 2 performing Sub Industries in the Information Technology sector are by average trading volume. 
+```{r}
+top_two_groups <- tech_data %>%
+  group_by(GICS.Sub.Industry) %>%
+  summarise(avg_volume = mean(volume, na.rm = TRUE)) %>%
+  arrange(desc(avg_volume)) %>%
+  slice(1:2) %>%
+  pull(GICS.Sub.Industry)
+```
+
+3. Create a smaller data set containing just the information on the top 2 performing Information Technology Sub Industries by filtering the larger Information Technology data set.
+```{r}
+two_groups_data <- tech_data %>%
+  filter(GICS.Sub.Industry %in% top_two_groups)
+```
+
+4. Since the data was found to be left-skewed when plotting the histogram in Question 4, I cannot use any statistical tests that assume a normal distribution of data. Therefore, I will use a Mann-Whitney U test and stick with closing prices as our metric.
+```{r}
+wilcox.test(close~GICS.Sub.Industry, data=two_groups_data)
+```
+
+The resulting p-value is really small, much smaller than the default 95% confidence coefficient (alpha: 0.05) allows. Since the Mann-Whitney U tests for differences in median values, we must conclude that a difference was found. Based on the small p-value, we must reject the null hypothesis that states there is no difference in the median closing prices of the stocks in these two sub-sectors of the Information Technology sector. Knowing this tells us that there is a difference between the median closing prices, but not what the two industries were or what their median closing prices were.
+
+5. Let's determine what the top two sub-industries of the Information Technology sector were and their median closing prices.
+```{r}
+two_groups_data %>%
+  group_by(GICS.Sub.Industry) %>%
+  summarise(median_close = median(close))
+
+```
+
+
+
