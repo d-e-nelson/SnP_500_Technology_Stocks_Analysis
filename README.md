@@ -102,3 +102,29 @@ ggplot(avg_volume_data, aes(x = Security, y = avg_volume)) +
 
 The graph displays the names of companies in the Information Technology sector along the X-axis and their average trading volume on the Y-axis. Examining this graph alongside our first graph, we can see similarities between the top 5 performing Information Technology stocks. The top 5 performing Information Technology stocks are the same stocks shown on this graph, which have the top 5 average daily trading volumes; however, their ranking order is slightly different. Returning to my original question, these first two graphs lead me to wonder if daily trading volume has a significant impact on a stock’s performance.
 
+
+## Testing to See if a Corrolation Exists Between the Opening and Closing of Information Technology Stocks
+
+We will test to see if there is a correlation between the daily number of trades and the daily price shift of a stock in the Information Technology sector.
+
+1. Add a column to our data set for daily price shifts.
+
+```r
+tech_data <- tech_data %>%
+  mutate(price_shift = close - open)
+```
+
+2. Do a correlation test testing volume and price_shift against each other.
+
+```r
+cor_test <- cor.test(tech_data$volume, tech_data$price_shift)
+cor_test
+```
+
+![Wilcox Test Results](images/wilcox_results.png)
+
+The goal was to check if there was a correlation between daily trading volume and daily changes in stock prices. The number of observations in the data set was checked because a small correlation could have a larger impact when the data set is larger. Here is what we learned from the results:
+
+1. Our confidence interval of 95% would give us an alpha of 0.05, and since our resulting p-value of 4.256e-05 is smaller than 0.05, we will reject the null hypothesis that there is no correlation between the daily trading volumes and daily stock price changes.
+
+2. Even though a correlation exists, our corr value of -0.0206256 tells us that it’s basically an insignificant correlation that, if it were ever to show up, would manifest as increased trading volume resulting in slight downward daily stock price shifts and vice versa.
