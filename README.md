@@ -121,7 +121,7 @@ cor_test <- cor.test(tech_data$volume, tech_data$price_shift)
 cor_test
 ```
 
-![Wilcox Test Results](images/wilcox_results.png)
+![Correlation Test Results](images/corr_test_results.png)
 
 The goal was to check if there was a correlation between daily trading volume and daily changes in stock prices. The number of observations in the data set was checked because a small correlation could have a larger impact when the data set is larger. Here is what we learned from the results:
 
@@ -150,3 +150,5 @@ ggplot(data = tech_data, aes(close))+
 The resulting distribution of closing prices forms a left-skewed curve. Across the 40 stocks in the Information Technology sector, the majority of the 39,379 observed closing prices fall between $20 and $100, with decreasing frequency extending out to around $260.
 
 Several factors could explain this distribution. Lower closing prices may reflect subpar stock performance at the time of observation, or they could result from stock splits intended to maintain accessible prices. An interesting follow-up question is whether the higher-priced observations represent a consistent group of stocks or if occasional outliers drive them. If the higher-priced stocks are consistent, comparing them with the top five stocks by trading volume identified in Question 1 could provide additional insight into sector dynamics.
+
+
