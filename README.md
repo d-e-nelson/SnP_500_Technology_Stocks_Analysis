@@ -198,4 +198,4 @@ two_groups_data %>%
   summarise(median_close = median(close))
 ```
 
-![Two Top Sub Industeries](images/top_groups.png)
+![Two Top Sub Industeries](images/two_groups.png)
