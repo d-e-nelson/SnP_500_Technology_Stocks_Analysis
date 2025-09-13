@@ -1,5 +1,3 @@
-# S&P500_Technology_Stocks_Analysis
-
 ## Introduction
 In this analysis I will be taking a look at ticker data from stocks in the Information Technology sector of the S&P 500 collected from the start of 2014 to the end of 2017, and all price values in the data set are in USD.
 
