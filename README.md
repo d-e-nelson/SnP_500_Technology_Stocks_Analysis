@@ -55,3 +55,6 @@ Going into this analysis, the question I want to research is whether there are a
 # S&P 500 Technology Stock Analysis 
 [Link to R Markdown Analysis](https://d-e-nelson.github.io/SnP_500_Technology_Stocks_Analysis/SnP-500-Stock-Analysis.html)
 
+
+# Tech_Data.json
+[Link to the JSON data for tech_data](https://d-e-nelson.github.io/SnP_500_Technology_Stocks_Analysis/tech_data.json)
