@@ -15,14 +15,35 @@ library(dplyr)
 library(ggplot2)
 ```
 
-## Load Copy of Data set
-
+**Code that was used to merge the data sets:**
 ```{r}
 getwd()
-setwd('C:\\Users\\david\\Desktop')
+setwd('I:\\Data Analytics\\archive')
 getwd()
-tech_data<-read.csv('tech_data.csv')
+
+stock_data <- read.csv('stock prices.csv')
+industry_data <- read.csv('Industry.csv')
+
+stock_data_complete <- stock_data %>%
+  left_join(industry_data, by = c("symbol" = "Symbol")) %>%
+  drop_na()   # removes any rows where the join didn't find a match
+
+write.csv(stock_data_complete, "stock_data_complete.csv", row.names = FALSE)
 ```
+
+**Isolate Data on the Information Technology Sector**
+
+It was decided to isolate the records concerning the Information Technology sector to limit the number of Companies and sub-sectors included in the different analyses. The goal is to make the graphs easier to read. The date column was also adjusted so that ggplot2 would recognize its information as dates rather than text.  
+```{r}
+tech_data <- stock_data_complete %>%
+  filter(GICS.Sector == "Information Technology") %>%
+  mutate(date = as.Date(date, format = "%Y-%m-%d"))
+
+tech_data <- select(tech_data, -"Headquarters.Location", -"Date.added", -"CIK", -"Founded")
+
+write.csv(tech_data, "tech_data.csv", row.names = FALSE)
+```
+
 
 ## Overall Question
 Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock's value. This question will be refined and adjusted as I explore the dataset.  
