@@ -55,5 +55,5 @@ write.csv(tech_data, "tech_data.csv", row.names = FALSE)
 Going into this analysis, the question I want to research is whether there are any variables present in the data set that could be used to predict the future directional change of a stock’s value. This question will be refined and adjusted as I explore the dataset.
 
 # S&P 500 Technology Stock Analysis 
-[Link to R Markdown Analysis](https://d-e-nelson.github.io/SnP_500_Technology_Stocks_Analysis/SnP%20500%20Stock%20Analysis.html)
+[Link to R Markdown Analysis](https://d-e-nelson.github.io/SnP_500_Technology_Stocks_Analysis/SnP-500-Stock-Analysis.html)
 
