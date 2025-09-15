@@ -13,6 +13,8 @@ In this analysis I will be taking a look at ticker data from stocks in the Infor
 9. GICS.Sector: The wider sector the stock is part of.
 10. GICS.Sub.Industry: The sub sector of the sector the stock occupies. Ex: IT Consulting & Other Services
 
+Link to Tech_data.csv: [link](tech_data.csv)
+
 ## Data Set Construction
 Tech_data.csv is was constructed by combining two seperate data sets and then selecting out a subset of the larger data set that comprised just GICS.Sector data from the Information Technoloy sector. 
 
