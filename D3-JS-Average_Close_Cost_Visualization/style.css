@@ -1,0 +1,16 @@
+.chart-title{
+  text-align:left;
+  font-family: sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+}
+
+
+g.chart text {
+  fill: #333;
+  font-size: 18px;
+  text-anchor: start;
+  alignment-baseline: middle;
+}
+
