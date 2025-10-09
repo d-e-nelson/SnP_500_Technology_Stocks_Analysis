@@ -71,5 +71,5 @@ Going into this analysis, the question I want to research is whether there are a
 
 ## Average Stock Closing Price by Sub-Industry
 
-1. Folder with files: [link](https://github.com/d-e-nelson/SnP_500_Technology_Stocks_Analysis/tree/main/D3-JS-Average_Close_Cost_Visualization)
+1. Folder with files: [link](D3-JS-Average_Close_Cost_Visualization)
 2. CodePen for Project: [link](https://codepen.io/d-e-nelson/pen/dPGNXPL)
