@@ -73,3 +73,7 @@ Going into this analysis, the question I want to research is whether there are a
 
 1. Folder with files: [link](D3-JS-Average_Close_Cost_Visualization)
 2. CodePen for Project: [link](https://codepen.io/d-e-nelson/pen/dPGNXPL)
+
+## DeepNotes Juypter Notebook Stock Analysis
+1. Notebook [link](https://deepnote.com/workspace/Davids-Data-Analysis-Course-Work-7f8561ff-35cb-4878-ae1c-a489b5c05472/project/David-Nelsons-Untitled-project-55728295-84ec-4b42-bee9-c6998998fe98/notebook/ReadMe-bc5e82ce928d47d88a0346564ebf6385?utm_source=share-modal&utm_medium=product-shared-content&utm_campaign=notebook&utm_content=55728295-84ec-4b42-bee9-c6998998fe98)
+
